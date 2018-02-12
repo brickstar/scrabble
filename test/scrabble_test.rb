@@ -1,32 +1,51 @@
-gem 'minitest'
-require_relative '../lib/scrabble'
+require './lib/scrabble'
 require 'minitest/autorun'
 require 'minitest/pride'
 require 'pry'
 
+
 class ScrabbleTest < Minitest::Test
-  def test_it_can_score_a_single_letter
-    assert_equal 1, Scrabble.new.score("a")
-    assert_equal 4, Scrabble.new.score("f")
+
+  def test_scrabble_exists
+    game = Scrabble.new
+
+    assert_instance_of Scrabble, game
+  end
+
+
+  def test_it_can_score_a_letter
+    game = Scrabble.new
+
+    assert_equal 1, game.score_letter('a')
+  end
+
+  def test_it_returns_0_if_word_is_empty_string
+    game = Scrabble.new
+
+    assert_equal 0, game.score("")
+  end
+
+  def test_it_returns_nil_if_word_is_empty_string
+    game = Scrabble.new
+
+    assert_equal 0, game.score(nil)
   end
 
   def test_it_can_score_a_word
-    assert_equal 8, Scrabble.new.score("hello")
+    game = Scrabble.new
+
+    assert_equal 8, game.score('hello')
   end
 
-  def test_it_can_score_an_empty_string
-    assert_equal 0, Scrabble.new.score("")
+  def test_it_can_score_with_multipliers
+    game = Scrabble.new
+
+    assert_equal 9, game.score_with_multipliers('hello', [1,2,1,1,1])
   end
 
-  def test_it_can_score_when_someone_passes_nil
-    assert_equal 0, Scrabble.new.score(nil)
-  end
+  def test_it_can_use_word_multiplier
+    game = Scrabble.new
 
-  # def test_it_can_score_a_word_with_letter_multipliers
-  #   assert_equal 9, Scrabble.new.score_with_multipliers('hello', [1,2,1,1,1])
-  # end
-  #
-  # def test_it_can_score_a_word_with_word_multipliers
-  #
-  # end
+    assert_equal 48, game.score_with_multipliers('sparkle', [1,2,1,3,1,2,1], 2)
+  end
 end
